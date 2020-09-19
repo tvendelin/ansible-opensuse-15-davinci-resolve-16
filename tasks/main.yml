@@ -1,0 +1,39 @@
+---
+- name: 'Fake davinci'
+  file:
+      path: '/opt/resolve/bin'
+      state: directory
+      recurse: yes
+
+- name: 'Check if DaVinci is installed'
+  stat:
+      path: "/opt/resolve/bin"
+  register: davinci_installed
+
+- name: 'Stop if DaVinci is not installed'
+  fail: 
+      msg: "Install Davinci Resolve first"
+  when: (davinci_installed.stat.isdir is not defined) or 
+        (not (davinci_installed.stat.isdir))
+
+- name: 'Install libopenssl 1.0, libopenssl1_1-32bit'
+  zypper:
+      name: [
+          'libopenssl1_1-32bit', 
+          'libopenssl1_0_0']
+      state: present
+  notify: 
+    - reboot_davinci
+
+- name: "Symlink libssl.so.1.1 for DaVinci"
+  file:
+      path: "/opt/resolve/bin/libssl.so.10"
+      src: "/usr/lib64/libssl.so.1.1"
+      state: link
+  
+- name: "Symlink libcrypto.so.1.1 for DaVinci"
+  file:
+      path: "/opt/resolve/bin/libcrypto.so.1"
+      src: "/usr/lib/libcrypto.so.1.1"
+      state: link
+  
