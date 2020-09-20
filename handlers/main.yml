@@ -1,3 +1,4 @@
 ---
 - name: reboot_davinci
   reboot:
+  when: inventory_hostname != 'localhost'
