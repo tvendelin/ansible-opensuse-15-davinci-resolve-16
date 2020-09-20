@@ -1,9 +1,9 @@
 ---
-- name: 'Fake davinci'
-  file:
-      path: '/opt/resolve/bin'
-      state: directory
-      recurse: yes
+#- name: 'Fake davinci'
+#  file:
+#      path: '/opt/resolve/bin'
+#      state: directory
+#      recurse: yes
 
 - name: 'Check if DaVinci is installed'
   stat:
